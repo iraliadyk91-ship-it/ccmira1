@@ -11,6 +11,7 @@ import {
 import appCss from "../styles.css?url";
 import { Header } from "@/components/Header";
 import { Toaster } from "sonner";
+import { BookingProvider } from "@/hooks/use-booking";
 
 function NotFoundComponent() {
   return (
@@ -114,11 +115,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Header />
-      <main className="pt-[64px]">
-        <Outlet />
-      </main>
-      <Toaster richColors position="top-center" />
+      <BookingProvider>
+        <Header />
+        <main className="pt-[64px]">
+          <Outlet />
+        </main>
+        <Toaster richColors position="top-center" />
+      </BookingProvider>
     </QueryClientProvider>
   );
 }
