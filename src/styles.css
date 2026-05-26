@@ -1,6 +1,7 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
@@ -61,40 +62,61 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@theme inline {
+  --color-brand-cream: var(--brand-cream);
+  --color-brand-rose: var(--brand-rose);
+  --color-brand-stone: var(--brand-stone);
+  --color-brand-brown: var(--brand-brown);
+  --color-brand-terracotta: var(--brand-terracotta);
+  --color-brand-terracotta-dark: var(--brand-terracotta-dark);
+  --color-brand-hover: var(--brand-hover);
+  --font-display: 'Playfair Display', serif;
+}
+
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --background: #f5f4f2;
+  --foreground: #593110;
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
+  --card-foreground: #593110;
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
+  --popover-foreground: #593110;
+  --primary: #593110;
+  --primary-foreground: #ffffff;
+  --secondary: #e6d3cc;
+  --secondary-foreground: #593110;
+  --muted: #f0ebe7;
+  --muted-foreground: #8a6448;
+  --accent: #c8704d;
+  --accent-foreground: #ffffff;
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --border: #e0d6cf;
+  --input: #e0d6cf;
+  --ring: #c8704d;
+
+  /* Brand palette */
+  --brand-cream: #f5f4f2;
+  --brand-rose: #e6d3cc;
+  --brand-stone: #cacdd0;
+  --brand-brown: #593110;
+  --brand-terracotta: #c8704d;
+  --brand-terracotta-dark: #a05a3e;
+  --brand-hover: #e6d3cc;
+
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --sidebar: #f5f4f2;
+  --sidebar-foreground: #593110;
+  --sidebar-primary: #593110;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e6d3cc;
+  --sidebar-accent-foreground: #593110;
+  --sidebar-border: #e0d6cf;
+  --sidebar-ring: #c8704d;
 }
 
 .dark {
@@ -140,5 +162,12 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: 'Playfair Display', Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
 }
