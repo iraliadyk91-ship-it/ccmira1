@@ -249,6 +249,9 @@ export function BookingDialog({ open, onClose }: Props) {
                 {submitting ? <Loader2 className="animate-spin" size={18} /> : <Phone size={18} />}
                 Забронировать звонок
               </button>
+              <p className="text-xs mt-2 opacity-70 leading-snug" style={{ color: "#593110" }}>
+                Ваши ответы останутся полностью конфиденциальными и будут использованы исключительно для подготовки перед звонком.
+              </p>
             </div>
           </div>
         )}

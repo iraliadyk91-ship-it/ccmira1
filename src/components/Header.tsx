@@ -83,13 +83,13 @@ export function Header() {
               <X size={32} />
             </button>
           </div>
-          <nav className="flex-1 flex flex-col items-center justify-center gap-6 sm:gap-10 px-6 pb-10">
+          <nav className="flex flex-col items-start gap-6 sm:gap-8 px-4 sm:px-6 pt-8 pb-10">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
                 onClick={() => setOpen(false)}
-                className="font-display text-2xl sm:text-4xl text-center transition-colors duration-200"
+                className="font-display text-2xl sm:text-4xl text-left transition-colors duration-200"
                 style={{ color: "#593110" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = "#e6d3cc")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "#593110")}
