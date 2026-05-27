@@ -35,7 +35,7 @@ function TestimonialsPage() {
   const { open } = useBooking();
   return (
     <div
-      style={{ backgroundColor: "#f5f4f2" }}
+      style={{ backgroundColor: "#CACDD0" }}
       className="min-h-screen py-12 sm:py-20 px-4 sm:px-6"
     >
       <div className="mx-auto max-w-4xl">
