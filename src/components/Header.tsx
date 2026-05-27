@@ -83,7 +83,7 @@ export function Header() {
               <X size={32} />
             </button>
           </div>
-          <nav className="flex flex-col items-start gap-6 sm:gap-8 px-4 sm:px-6 pt-8 pb-10">
+          <nav className="flex flex-col items-start gap-6 sm:gap-8 px-8 sm:px-12 pt-8 pb-10">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.to}
