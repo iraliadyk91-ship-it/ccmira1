@@ -37,7 +37,10 @@ function EcosystemPage() {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "#f5f4f2" }} className="min-h-screen py-12 sm:py-20 px-4 sm:px-6">
+    <div
+      style={{ background: "linear-gradient(to bottom, #f5f4f2 0%, #f5f4f2 40%, #E6D3CC 70%, #E6D3CC 100%)" }}
+      className="min-h-screen py-12 sm:py-20 px-4 sm:px-6"
+    >
       <div className="mx-auto max-w-4xl">
         <h1
           className="font-display text-3xl sm:text-5xl text-center mb-10 sm:mb-14"
