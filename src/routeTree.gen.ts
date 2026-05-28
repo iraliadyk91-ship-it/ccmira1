@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ThankYouRouteImport } from './routes/thank-you'
 import { Route as TestimonialsRouteImport } from './routes/testimonials'
 import { Route as PanelLoginRouteImport } from './routes/panel-login'
+import { Route as PanelRouteImport } from './routes/panel'
 import { Route as EcosystemRouteImport } from './routes/ecosystem'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
@@ -34,6 +35,11 @@ const TestimonialsRoute = TestimonialsRouteImport.update({
 const PanelLoginRoute = PanelLoginRouteImport.update({
   id: '/panel-login',
   path: '/panel-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PanelRoute = PanelRouteImport.update({
+  id: '/panel',
+  path: '/panel',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EcosystemRoute = EcosystemRouteImport.update({
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/ecosystem': typeof EcosystemRoute
+  '/panel': typeof PanelRoute
   '/panel-login': typeof PanelLoginRoute
   '/testimonials': typeof TestimonialsRoute
   '/thank-you': typeof ThankYouRoute
@@ -95,6 +102,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/ecosystem': typeof EcosystemRoute
+  '/panel': typeof PanelRoute
   '/panel-login': typeof PanelLoginRoute
   '/testimonials': typeof TestimonialsRoute
   '/thank-you': typeof ThankYouRoute
@@ -109,6 +117,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/ecosystem': typeof EcosystemRoute
+  '/panel': typeof PanelRoute
   '/panel-login': typeof PanelLoginRoute
   '/testimonials': typeof TestimonialsRoute
   '/thank-you': typeof ThankYouRoute
@@ -124,6 +133,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/ecosystem'
+    | '/panel'
     | '/panel-login'
     | '/testimonials'
     | '/thank-you'
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/ecosystem'
+    | '/panel'
     | '/panel-login'
     | '/testimonials'
     | '/thank-you'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/ecosystem'
+    | '/panel'
     | '/panel-login'
     | '/testimonials'
     | '/thank-you'
@@ -164,6 +176,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   EcosystemRoute: typeof EcosystemRoute
+  PanelRoute: typeof PanelRoute
   PanelLoginRoute: typeof PanelLoginRoute
   TestimonialsRoute: typeof TestimonialsRoute
   ThankYouRoute: typeof ThankYouRoute
@@ -193,6 +206,13 @@ declare module '@tanstack/react-router' {
       path: '/panel-login'
       fullPath: '/panel-login'
       preLoaderRoute: typeof PanelLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/panel': {
+      id: '/panel'
+      path: '/panel'
+      fullPath: '/panel'
+      preLoaderRoute: typeof PanelRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ecosystem': {
@@ -270,6 +290,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   EcosystemRoute: EcosystemRoute,
+  PanelRoute: PanelRoute,
   PanelLoginRoute: PanelLoginRoute,
   TestimonialsRoute: TestimonialsRoute,
   ThankYouRoute: ThankYouRoute,
