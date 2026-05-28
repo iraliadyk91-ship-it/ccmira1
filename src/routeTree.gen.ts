@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ThankYouRouteImport } from './routes/thank-you'
 import { Route as TestimonialsRouteImport } from './routes/testimonials'
+import { Route as PanelLoginRouteImport } from './routes/panel-login'
 import { Route as EcosystemRouteImport } from './routes/ecosystem'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
@@ -28,6 +29,11 @@ const ThankYouRoute = ThankYouRouteImport.update({
 const TestimonialsRoute = TestimonialsRouteImport.update({
   id: '/testimonials',
   path: '/testimonials',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PanelLoginRoute = PanelLoginRouteImport.update({
+  id: '/panel-login',
+  path: '/panel-login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EcosystemRoute = EcosystemRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/ecosystem': typeof EcosystemRoute
+  '/panel-login': typeof PanelLoginRoute
   '/testimonials': typeof TestimonialsRoute
   '/thank-you': typeof ThankYouRoute
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/ecosystem': typeof EcosystemRoute
+  '/panel-login': typeof PanelLoginRoute
   '/testimonials': typeof TestimonialsRoute
   '/thank-you': typeof ThankYouRoute
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/ecosystem': typeof EcosystemRoute
+  '/panel-login': typeof PanelLoginRoute
   '/testimonials': typeof TestimonialsRoute
   '/thank-you': typeof ThankYouRoute
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/ecosystem'
+    | '/panel-login'
     | '/testimonials'
     | '/thank-you'
     | '/admin/dashboard'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/ecosystem'
+    | '/panel-login'
     | '/testimonials'
     | '/thank-you'
     | '/admin/dashboard'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/ecosystem'
+    | '/panel-login'
     | '/testimonials'
     | '/thank-you'
     | '/admin/dashboard'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   EcosystemRoute: typeof EcosystemRoute
+  PanelLoginRoute: typeof PanelLoginRoute
   TestimonialsRoute: typeof TestimonialsRoute
   ThankYouRoute: typeof ThankYouRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -173,6 +186,13 @@ declare module '@tanstack/react-router' {
       path: '/testimonials'
       fullPath: '/testimonials'
       preLoaderRoute: typeof TestimonialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/panel-login': {
+      id: '/panel-login'
+      path: '/panel-login'
+      fullPath: '/panel-login'
+      preLoaderRoute: typeof PanelLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ecosystem': {
@@ -250,6 +270,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   EcosystemRoute: EcosystemRoute,
+  PanelLoginRoute: PanelLoginRoute,
   TestimonialsRoute: TestimonialsRoute,
   ThankYouRoute: ThankYouRoute,
   BlogSlugRoute: BlogSlugRoute,
@@ -259,3 +280,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
