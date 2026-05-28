@@ -1,6 +1,8 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 
 export function Footer() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  if (!pathname.startsWith("/blog")) return null;
   return (
     <Link
       to="/panel-login"
