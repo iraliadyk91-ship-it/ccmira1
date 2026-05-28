@@ -10,6 +10,7 @@ import {
 
 import appCss from "../styles.css?url";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { Toaster } from "sonner";
 import { BookingProvider } from "@/hooks/use-booking";
 
@@ -120,6 +121,7 @@ function RootComponent() {
         <main className="pt-[64px]">
           <Outlet />
         </main>
+        <Footer />
         <Toaster richColors position="top-center" />
       </BookingProvider>
     </QueryClientProvider>
