@@ -7,6 +7,7 @@ import {
   listPanelSlots,
   setPanelDaySlots,
 } from "@/lib/panel.functions";
+import { Calendar } from "@/components/ui/calendar";
 
 export const Route = createFileRoute("/panel")({
   head: () => ({ meta: [{ title: "Админ Панель" }] }),
@@ -17,7 +18,9 @@ const BROWN = "#593110";
 const BG = "#f5f4f2";
 const BORDER = "#e0d6cf";
 
-const TIME_SLOTS = ["11:00", "12:00", "13:00", "14:00", "15:00", "16:00"];
+const HOUR_SLOTS = Array.from({ length: 24 }, (_, i) =>
+  `${String(i).padStart(2, "0")}:00`,
+);
 
 function PanelPage() {
   const navigate = useNavigate();
@@ -222,20 +225,18 @@ function ScheduleTab() {
     return map;
   }, [data]);
 
-  const days = useMemo(() => {
-    const arr: string[] = [];
-    const today = new Date();
-    for (let i = 0; i < 14; i++) {
-      const d = new Date(today);
-      d.setDate(today.getDate() + i);
-      arr.push(toISO(d));
-    }
-    return arr;
-  }, []);
+  const workingDays = useMemo(
+    () =>
+      Object.keys(byDate)
+        .filter((d) => byDate[d].length > 0)
+        .map((d) => new Date(d + "T00:00:00")),
+    [byDate],
+  );
 
-  function openDay(date: string) {
-    setSelected(date);
-    setChecked(byDate[date] ?? []);
+  function openDay(d: Date) {
+    const iso = toISO(d);
+    setSelected(iso);
+    setChecked(byDate[iso] ?? []);
   }
 
   function toggle(t: string) {
@@ -259,39 +260,25 @@ function ScheduleTab() {
   return (
     <div>
       <p className="text-sm mb-4 opacity-80" style={{ color: BROWN }}>
-        Нажмите на дату, чтобы настроить доступное время. Зелёный — рабочий день,
-        серый — выходной.
+        Выберите дату в календаре, чтобы настроить доступное время. Зелёный —
+        рабочий день, серый — выходной.
       </p>
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
-        {days.map((d) => {
-          const has = (byDate[d] ?? []).length > 0;
-          const date = new Date(d + "T00:00:00");
-          return (
-            <button
-              key={d}
-              onClick={() => openDay(d)}
-              className="rounded-xl border p-3 text-left transition"
-              style={{
-                borderColor: BORDER,
-                backgroundColor: has ? "#dcecd8" : "#e9e7e4",
-                color: BROWN,
-              }}
-            >
-              <div className="text-xs opacity-70">
-                {date.toLocaleDateString("ru-RU", { weekday: "short" })}
-              </div>
-              <div className="font-display text-lg">
-                {date.toLocaleDateString("ru-RU", {
-                  day: "numeric",
-                  month: "short",
-                })}
-              </div>
-              <div className="text-xs mt-1">
-                {has ? `${byDate[d].length} слот(ов)` : "Выходной"}
-              </div>
-            </button>
-          );
-        })}
+      <div
+        className="inline-block bg-white rounded-2xl border p-2"
+        style={{ borderColor: BORDER }}
+      >
+        <Calendar
+          mode="single"
+          captionLayout="dropdown"
+          startMonth={new Date(new Date().getFullYear() - 1, 0)}
+          endMonth={new Date(new Date().getFullYear() + 5, 11)}
+          onSelect={(d) => d && openDay(d)}
+          modifiers={{ working: workingDays }}
+          modifiersStyles={{
+            working: { backgroundColor: "#dcecd8", color: BROWN },
+          }}
+          className="pointer-events-auto"
+        />
       </div>
 
       {selected && (
@@ -301,7 +288,7 @@ function ScheduleTab() {
           onClick={() => setSelected(null)}
         >
           <div
-            className="bg-white rounded-2xl border p-5 w-full max-w-sm"
+            className="bg-white rounded-2xl border p-5 w-full max-w-sm max-h-[85vh] overflow-y-auto"
             style={{ borderColor: BORDER }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -310,10 +297,14 @@ function ScheduleTab() {
                 weekday: "long",
                 day: "numeric",
                 month: "long",
+                year: "numeric",
               })}
             </h3>
-            <div className="space-y-2 mb-4">
-              {TIME_SLOTS.map((t) => (
+            <p className="text-xs opacity-70 mb-2" style={{ color: BROWN }}>
+              Выберите доступное время (00:00–23:00)
+            </p>
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {HOUR_SLOTS.map((t) => (
                 <label
                   key={t}
                   className="flex items-center gap-2 text-sm"
