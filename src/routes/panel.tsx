@@ -7,6 +7,7 @@ import {
   listPanelSlots,
   setPanelDaySlots,
 } from "@/lib/panel.functions";
+import { Calendar } from "@/components/ui/calendar";
 
 export const Route = createFileRoute("/panel")({
   head: () => ({ meta: [{ title: "Админ Панель" }] }),
@@ -18,6 +19,10 @@ const BG = "#f5f4f2";
 const BORDER = "#e0d6cf";
 
 const TIME_SLOTS = ["11:00", "12:00", "13:00", "14:00", "15:00", "16:00"];
+
+const HOUR_SLOTS = Array.from({ length: 24 }, (_, i) =>
+  `${String(i).padStart(2, "0")}:00`,
+);
 
 function PanelPage() {
   const navigate = useNavigate();
