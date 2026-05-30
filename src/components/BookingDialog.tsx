@@ -273,14 +273,18 @@ export function BookingDialog({ open, onClose }: Props) {
                         setDate(iso);
                         setTime("");
                       }}
-                      disabled={(value) => !availableDateSet.has(toISODate(value))}
+                      disabled={(value) =>
+                        !availableDateSet.has(toISODate(value)) ||
+                        value < monthRange.start ||
+                        value > monthRange.end
+                      }
                       modifiers={{ working: enabledDates }}
                       modifiersStyles={{
                         working: { backgroundColor: "#dcecd8", color: "#593110" },
                       }}
-                      captionLayout="dropdown"
-                      startMonth={enabledDates[0]}
-                      endMonth={enabledDates[enabledDates.length - 1]}
+                      captionLayout="label"
+                      startMonth={monthRange.start}
+                      endMonth={monthRange.end}
                       initialFocus
                       className="p-3 pointer-events-auto"
                     />
