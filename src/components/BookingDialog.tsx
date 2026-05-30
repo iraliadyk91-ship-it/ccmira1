@@ -131,6 +131,13 @@ export function BookingDialog({ open, onClose }: Props) {
     [availableDates],
   );
 
+  const monthRange = useMemo(() => {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    const end = new Date(now.getFullYear(), now.getMonth() + 2, 0);
+    return { start, end };
+  }, []);
+
   async function submitBooking() {
     if (!formValid) return;
     setSubmitting(true);
