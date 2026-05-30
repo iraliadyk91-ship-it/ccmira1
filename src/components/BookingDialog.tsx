@@ -255,7 +255,7 @@ export function BookingDialog({ open, onClose }: Props) {
                       <CalendarIcon size={16} />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent className="z-[70] w-auto p-0" align="start">
                     <Calendar
                       mode="single"
                       selected={selectedDate}
