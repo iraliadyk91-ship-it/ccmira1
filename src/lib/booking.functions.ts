@@ -2,6 +2,13 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
+function toLocalISODate(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 function normalize(s: string): string {
   return s
     .toLowerCase()
@@ -38,7 +45,7 @@ export const createBooking = createServerFn({ method: "POST" })
 
 export const getAvailableSlots = createServerFn({ method: "GET" }).handler(
   async () => {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = toLocalISODate(new Date());
     const { data, error } = await supabaseAdmin
       .from("availability_slots")
       .select("slot_date, slot_time")
