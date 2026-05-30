@@ -131,6 +131,13 @@ export function BookingDialog({ open, onClose }: Props) {
     [availableDates],
   );
 
+  const monthRange = useMemo(() => {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    const end = new Date(now.getFullYear(), now.getMonth() + 2, 0);
+    return { start, end };
+  }, []);
+
   async function submitBooking() {
     if (!formValid) return;
     setSubmitting(true);
@@ -266,14 +273,18 @@ export function BookingDialog({ open, onClose }: Props) {
                         setDate(iso);
                         setTime("");
                       }}
-                      disabled={(value) => !availableDateSet.has(toISODate(value))}
+                      disabled={(value) =>
+                        !availableDateSet.has(toISODate(value)) ||
+                        value < monthRange.start ||
+                        value > monthRange.end
+                      }
                       modifiers={{ working: enabledDates }}
                       modifiersStyles={{
                         working: { backgroundColor: "#dcecd8", color: "#593110" },
                       }}
-                      captionLayout="dropdown"
-                      startMonth={enabledDates[0]}
-                      endMonth={enabledDates[enabledDates.length - 1]}
+                      captionLayout="label"
+                      startMonth={monthRange.start}
+                      endMonth={monthRange.end}
                       initialFocus
                       className="p-3 pointer-events-auto"
                     />
