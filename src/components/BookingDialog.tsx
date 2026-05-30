@@ -1,12 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { X, Phone, Loader2, Play } from "lucide-react";
+import { X, Phone, Loader2, Play, CalendarIcon } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import {
   createBooking,
   getAvailableSlots,
   verifyKeyPhrase,
 } from "@/lib/booking.functions";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 interface Props {
   open: boolean;
@@ -14,6 +22,33 @@ interface Props {
 }
 
 type Step = 1 | 2;
+
+function parseISODate(dateStr: string): Date | undefined {
+  const iso = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!iso) return undefined;
+
+  const year = Number(iso[1]);
+  const month = Number(iso[2]);
+  const day = Number(iso[3]);
+  const result = new Date(year, month - 1, day);
+
+  if (
+    result.getFullYear() !== year ||
+    result.getMonth() !== month - 1 ||
+    result.getDate() !== day
+  ) {
+    return undefined;
+  }
+
+  return result;
+}
+
+function toISODate(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
 
 export function BookingDialog({ open, onClose }: Props) {
   const navigate = useNavigate();
@@ -89,6 +124,12 @@ export function BookingDialog({ open, onClose }: Props) {
 
   const availableDates = useMemo(() => Object.keys(slots).sort(), [slots]);
   const timesForDate = date ? slots[date] ?? [] : [];
+  const availableDateSet = useMemo(() => new Set(availableDates), [availableDates]);
+  const selectedDate = useMemo(() => parseISODate(date), [date]);
+  const enabledDates = useMemo(
+    () => availableDates.map((item) => parseISODate(item)).filter(Boolean) as Date[],
+    [availableDates],
+  );
 
   async function submitBooking() {
     if (!formValid) return;
@@ -188,28 +229,56 @@ export function BookingDialog({ open, onClose }: Props) {
                 <label className="block text-sm mb-1" style={{ color: "#593110" }}>
                   Выберите дату
                 </label>
-                <select
-                  value={date}
-                  onChange={(e) => {
-                    setDate(e.target.value);
-                    setTime("");
-                  }}
-                  className="w-full rounded-lg border px-3 py-2 bg-white"
-                  style={{ borderColor: "#e0d6cf", color: "#593110" }}
-                >
-                  <option value="">
-                    {slotsLoading ? "Загрузка..." : "— выберите дату —"}
-                  </option>
-                  {availableDates.map((d) => (
-                    <option key={d} value={d}>
-                      {new Date(d).toLocaleDateString("ru-RU", {
-                        weekday: "short",
-                        day: "numeric",
-                        month: "long",
-                      })}
-                    </option>
-                  ))}
-                </select>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-between rounded-lg px-3 py-2 font-normal",
+                        !date && "text-muted-foreground",
+                      )}
+                      style={{ borderColor: "#e0d6cf", color: "#593110", backgroundColor: "#fff" }}
+                    >
+                      <span>
+                        {date && selectedDate
+                          ? selectedDate.toLocaleDateString("ru-RU", {
+                              weekday: "short",
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            })
+                          : slotsLoading
+                            ? "Загрузка..."
+                            : "— выберите дату —"}
+                      </span>
+                      <CalendarIcon size={16} />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="z-[70] w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={(value) => {
+                        if (!value) return;
+                        const iso = toISODate(value);
+                        if (!availableDateSet.has(iso)) return;
+                        setDate(iso);
+                        setTime("");
+                      }}
+                      disabled={(value) => !availableDateSet.has(toISODate(value))}
+                      modifiers={{ working: enabledDates }}
+                      modifiersStyles={{
+                        working: { backgroundColor: "#dcecd8", color: "#593110" },
+                      }}
+                      captionLayout="dropdown"
+                      startMonth={enabledDates[0]}
+                      endMonth={enabledDates[enabledDates.length - 1]}
+                      initialFocus
+                      className="p-3 pointer-events-auto"
+                    />
+                  </PopoverContent>
+                </Popover>
                 {!slotsLoading && availableDates.length === 0 && (
                   <p className="text-xs mt-1 opacity-70" style={{ color: "#593110" }}>
                     Свободных дат пока нет. Пожалуйста, попробуйте позже.
